@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>大大物流比价助手</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <!-- 头部：使用你昨天设计的Logo -->
+        <header>
+            <div class="logo">
+                <i class="fas fa-truck-fast"></i>
+                <h1>大大物流比价助手</h1>
+            </div>
+            <p class="subtitle">基于实时数据的智能比价工具 | 专为物流从业者设计</p>
+        </header>
+
+        <!-- 主比价区域 -->
+        <main>
+            <div class="input-section">
+                <h2><i class="fas fa-calculator"></i> 比价计算器</h2>
+
+                <div class="input-group">
+                    <label for="weight">
+                        <i class="fas fa-weight-hanging"></i> 货物重量（kg）
+                    </label>
+                    <div class="input-with-slider">
+                        <input type="range" id="weight-slider" min="0.1" max="5000" step="0.1" value="1">
+                        <input type="number" id="weight" min="0.1" max="5000" step="0.1" value="1">
+                        <span class="unit">kg</span>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <label for="destination">
+                        <i class="fas fa-map-marker-alt"></i> 请选择目的地
+                    </label>
+                    <select id="destination">
+                        <!-- 选项将由JavaScript自动生成 -->
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label for="urgency">
+                        <i class="fas fa-clock"></i> 紧急程度
+                    </label>
+                    <select id="urgency">
+                        <option value="标准">标准（3-5天）</option>
+                        <option value="加急">加急（1-2天）</option>
+                        <option value="特急">特急（次日达）</option>
+                    </select>
+                </div>
+
+                <button id="calculate-btn" class="calculate-btn">
+                    <i class="fas fa-bolt"></i> 立即比价
+                </button>
+            </div>
+
+            <!-- 结果显示区域 -->
+            <div class="results-section">
+                <h2><i class="fas fa-chart-bar"></i> 比价结果</h2>
+                <div class="results-container" id="results-container">
+                    <div class="empty-state">
+                        <i class="fas fa-search"></i>
+                        <p>输入信息后点击“立即比价”查看结果</p>
+                    </div>
+                </div>
+
+                <!-- 总计行 -->
+                <div class="summary" id="summary" style="display: none;">
+                    <h3><i class="fas fa-file-invoice-dollar"></i> 费用汇总</h3>
+                    <div class="summary-content">
+                        <div class="summary-item">
+                            <span>推荐选择：</span>
+                            <strong id="recommended">-</strong>
+                        </div>
+                        <div class="summary-item">
+                            <span>平均价格：</span>
+                            <strong id="average-price">-</strong>
+                        </div>
+                        <div class="summary-item">
+                            <span>价格区间：</span>
+                            <strong id="price-range">-</strong>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <!-- 底部信息 -->
+        <footer>
+            <div class="footer-content">
+                <div class="disclaimer">
+                    <h4><i class="fas fa-exclamation-circle"></i> 使用说明</h4>
+                    <p>• 价格基于各快递公司公开报价计算，实际费用以官方为准</p>
+                    <p>• 偏远地区、特殊物品可能产生附加费用</p>
+                    <p>• 更新时间：2026年2月</p>
+                </div>
+                <div class="creator-info">
+                    <p>Created by <strong>大大</strong> | AI应用开发者</p>
+                    <p>如有建议或合作，请联系：cohenmohammad506@gmail.com</p>
+                    <p class="tools-used">
+                        <i class="fas fa-code"></i> 使用HTML/CSS/JavaScript开发 |
+                        <i class="fas fa-robot"></i> AI辅助设计
+                    </p>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
