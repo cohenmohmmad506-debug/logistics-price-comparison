@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>大大极速下单 - VIP专属通道</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f5f7;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+
+        .header {
+            background-color: #0052cc;
+            color: white;
+            padding: 15px 20px;
+            text-align: center;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .container {
+            padding: 15px;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+
+        .card-title {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 12px;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 13px;
+            color: #555;
+            margin-bottom: 4px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            box-sizing: border-box;
+            font-size: 15px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #0052cc;
+        }
+
+        .readonly-input {
+            background-color: #f9f9f9;
+            color: #888;
+            border-color: #eee;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background-color: #0052cc;
+            color: white;
+            border: none;
+            padding: 14px;
+            font-size: 16px;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 6px rgba(0, 82, 204, 0.2);
+        }
+
+        .btn-submit:active {
+            background-color: #003d99;
+            transform: translateY(1px);
+        }
+
+        .history-list {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 1px solid #ddd;
+            border-top: none;
+            z-index: 10;
+            border-radius: 0 0 6px 6px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .history-item {
+            padding: 10px;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="header">📦 大大极速下单</div>
+
+    <div class="container">
+        <div class="card">
+            <div class="card-title">🛡️ 专属单号与发件人</div>
+            <div class="form-group">
+                <label>送货单号 (系统会自动递增)</label>
+                <input type="text" id="orderNumber" class="form-control" placeholder="例如: 001">
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <div class="form-group" style="flex: 1;">
+                    <input type="text" id="senderName" class="form-control readonly-input" placeholder="发件人" readonly>
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <input type="text" id="senderPhone" class="form-control readonly-input" placeholder="电话" readonly>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">📍 收件人信息</div>
+            <div class="form-group">
+                <label>收件人姓名/公司 (点击查看历史)</label>
+                <input type="text" id="receiverName" class="form-control" placeholder="请输入收件方名称" autocomplete="off"
+                    onfocus="showHistory()">
+                <div id="historyBox" class="history-list"></div>
+            </div>
+            <div class="form-group">
+                <input type="tel" id="receiverPhone" class="form-control" placeholder="收件人电话">
+            </div>
+            <div class="form-group">
+                <input type="text" id="receiverAddress" class="form-control" placeholder="收件详细地址 (省市区-街道)">
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">⚖️ 业务与货物信息</div>
+            <div class="form-group">
+                <label>运输方式</label>
+                <select id="transportMethod" class="form-control">
+                    <option value="陆运" selected>🚚 陆运 (默认)</option>
+                    <option value="空运">✈️ 空运</option>
+                    <option value="海运">🚢 海运</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <input type="text" id="itemName" class="form-control" placeholder="物品名称 (例: 纸箱/配件)">
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <div class="form-group" style="flex: 1;">
+                    <input type="number" step="0.01" id="itemWeight" class="form-control" placeholder="重量KG (选填)">
+                </div>
+                <div class="form-group" style="flex: 1;">
+                    <input type="number" step="0.01" id="itemVolume" class="form-control" placeholder="体积m³ (选填)">
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="number" step="0.01" id="unloadFee" class="form-control" placeholder="卸货费 (元/选填，默认0)">
+            </div>
+        </div>
+
+        <button class="btn-submit" onclick="submitOrder()">🚀 确认下单，呼叫取件</button>
+    </div>
+
+    <script>
+        function incrementString(str) {
+            return str.replace(/\d+$/, function (n) {
+                return String(parseInt(n, 10) + 1).padStart(n.length, '0');
+            });
+        }
+
+        window.onload = function () {
+            const urlParams = new URLSearchParams(window.location.search);
+            document.getElementById('senderName').value = urlParams.get('s_name') || '散客(未绑定)';
+            document.getElementById('senderPhone').value = urlParams.get('s_phone') || '请绑定';
+            const savedOrderNum = localStorage.getItem('dada_last_order_num');
+            if (savedOrderNum) {
+                document.getElementById('orderNumber').value = incrementString(savedOrderNum);
+            } else {
+                document.getElementById('orderNumber').value = '001';
+            }
+        };
+
+        function showHistory() {
+            const historyBox = document.getElementById('historyBox');
+            const history = JSON.parse(localStorage.getItem('dada_history')) || [];
+            if (history.length === 0) return;
+            historyBox.innerHTML = '';
+            history.forEach(item => {
+                let div = document.createElement('div');
+                div.className = 'history-item';
+                div.innerHTML = `<b>${item.name}</b> <span>${item.phone} | ${item.address}</span>`;
+                div.onclick = function () {
+                    document.getElementById('receiverName').value = item.name;
+                    document.getElementById('receiverPhone').value = item.phone;
+                    document.getElementById('receiverAddress').value = item.address;
+                    historyBox.style.display = 'none';
+                };
+                historyBox.appendChild(div);
+            });
+            historyBox.style.display = 'block';
+        }
+
+        document.addEventListener('click', function (e) {
+            if (e.target.id !== 'receiverName') {
+                document.getElementById('historyBox').style.display = 'none';
+            }
+        });
+
+        async function submitOrder() {
+            const orderNum = document.getElementById('orderNumber').value;
+            const rName = document.getElementById('receiverName').value;
+            if (!orderNum || !rName) {
+                alert("⚠️ 请填写单号和收件人！");
+                return;
+            }
+
+            // 保存历史记录和单号递增（你原来的代码，保留）
+            localStorage.setItem('dada_last_order_num', orderNum);
+            let history = JSON.parse(localStorage.getItem('dada_history')) || [];
+            history = history.filter(item => item.name !== rName);
+            history.unshift({ name: rName, phone: document.getElementById('receiverPhone').value, address: document.getElementById('receiverAddress').value });
+            if (history.length > 5) history.pop();
+            localStorage.setItem('dada_history', JSON.stringify(history));
+
+            // 按钮反馈
+            const btn = document.querySelector('.btn-submit');
+            btn.innerHTML = "⏳ 终极核武器传输中...";
+            btn.style.backgroundColor = "#ff9900";
+
+            // 收集表单数据
+            const orderData = {
+                "送货单号": orderNum,
+                "发件人": document.getElementById('senderName').value || '散客',
+                "发件电话": document.getElementById('senderPhone').value || '无',
+                "收件人": rName,
+                "收件电话": document.getElementById('receiverPhone').value || '无',
+                "收件地址": document.getElementById('receiverAddress').value || '无',
+                "运输方式": document.getElementById('transportMethod').value,
+                "物品名称": document.getElementById('itemName').value || '未填',
+                "重量KG": document.getElementById('itemWeight').value || '0',
+                "体积m3": document.getElementById('itemVolume').value || '0',
+                "卸货费": document.getElementById('unloadFee').value || '0',
+                "下单时间": new Date().toLocaleString()
+            };
+
+            try {
+                // 这里替换成你的 Worker 地址！！！
+                const WORKER_URL = 'https://dada-order-relay.cohenmohmmad506.workers.dev';
+
+                const response = await fetch(WORKER_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                        // 如果以后加了 token 验证，取消下面这行的注释并填上你的 token
+                        // 'Authorization': 'Bearer 你自己设定的token'
+                    },
+                    body: JSON.stringify(orderData)
+                });
+
+                if (response.ok) {
+                    alert(`✅ 数据发射成功！\n单号 ${orderNum} 已完美推送！`);
+                } else {
+                    const errText = await response.text();
+                    alert(`❌ 发送失败：${errText}`);
+                }
+            } catch (err) {
+                alert('❌ 网络错误：' + err.message);
+            } finally {
+                window.location.reload();
+            }
+        }
+    </script>
+</body>
+
+</html>
